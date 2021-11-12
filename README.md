@@ -11,7 +11,7 @@ This is a js time-friendly plugin.
 + npm
 
 ```sh
-$ npm install xqtime
+npm install xqtime
 ```
 
 + cdn
@@ -32,7 +32,7 @@ $ npm install xqtime
 
 `const xqtime = require('xqtime');`
 
-## Format description
+### Format description
 
 + Year month day format
 
@@ -149,19 +149,17 @@ console.log('gmt result:', gmtResult);
 
 ### How to use ES6
 
-Reference: test/es5.html
+Reference: test/es6.html
 
 + Introduce js
 
-```html
-<script src="https://unpkg.com/xqtime/lib/xqtime-es6.min.js"></script>
-```
+Save js to the local `./js/xqtime-es6.min.js`;
 
 + Call method
 
 ```html
 <script type="module">
-     import xqtime from'../lib/xqtime-es6.min.js';
+     import xqtime from'./js/xqtime-es6.min.js';
      const ymdDate = '2012-04-12 10:03:15';
      const gmtDate = new Date();
      let ymdResult = xqtime.friend(ymdDate);
@@ -170,6 +168,7 @@ Reference: test/es5.html
      console.log('gmt result:', gmtResult);
 </script>
 ```
+
 ## ask questions
 
 [submit your question](https://github.com/gitguanqi/xqtime/issues/new)

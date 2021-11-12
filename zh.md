@@ -9,7 +9,7 @@
 ### 安装xqtime
 
 ```sh
-$ npm install xqtime
+npm install xqtime
 ```
 
 ### 引入xqtime
@@ -149,19 +149,17 @@ console.log('gmt result:', gmtResult);
 
 ### ES6使用方法
 
-参照: test/es5.html
+参照: test/es6.html
 
 + 引入js
 
-```html
-<script src="https://unpkg.com/xqtime/lib/xqtime-es6.min.js"></script>
-```
+保存js到本地`./js/xqtime-es6.min.js`;
 
 + 调用方法
 
 ```html
 <script type="module">
-    import xqtime from '../lib/xqtime-es6.min.js';
+    import xqtime from './js/xqtime-es6.min.js';
     const ymdDate = '2012-04-12 10:03:15';
     const gmtDate = new Date();
     let ymdResult = xqtime.friend(ymdDate);
