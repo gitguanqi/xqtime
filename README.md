@@ -18,8 +18,7 @@ $ npm install xqtime
 
 ```html
 <!-- unkpg -->
-<script src="https://unpkg.com/xqlight/lib/js/xqlight.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/xqlight/lib/css/xqlight.min.css">
+<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
 ```
 
 ### Introducing xqtime
