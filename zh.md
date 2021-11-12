@@ -16,13 +16,20 @@ $ npm install xqtime
 
 + npm
 
-const xqtime = require('xqtime');
+`const xqtime = require('xqtime');`
 
 + cdn
 
 ```html
 <!-- unkpg -->
+<!-- 1.nodejs -->
 <script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
+
+<!-- 2.es5 -->
+<script src="https://unpkg.com/xqtime/lib/xqtime-es5.min.js"></script>
+
+<!-- 3.es6 -->
+<script src="https://unpkg.com/xqtime/lib/xqtime-es6.min.js"></script>
 ```
 
 ### 格式说明
@@ -117,6 +124,51 @@ const millennium = '960-11-12 11:05:11';
 let millenniumResult = xqtime.friend(millennium);
 console.log('millennium is:', millenniumResult); // millennium is: 1千年前
 
+```
+
+### ES5使用方法
+
+参照: test/es5.html
+
++ 引入js
+
+```html
+<script src="https://unpkg.com/xqtime/lib/xqtime-es5.min.js"></script>
+```
+
++ 调用方法
+
+```js
+const ymdDate = '2012-04-12 10:03:15';
+const gmtDate = new Date();
+let ymdResult = xqtime.friend(ymdDate);
+let gmtResult = xqtime.friend(gmtDate);
+console.log('ymd result:', ymdResult);
+console.log('gmt result:', gmtResult);
+```
+
+### ES6使用方法
+
+参照: test/es5.html
+
++ 引入js
+
+```html
+<script src="https://unpkg.com/xqtime/lib/xqtime-es6.min.js"></script>
+```
+
++ 调用方法
+
+```html
+<script type="module">
+    import xqtime from '../lib/xqtime-es6.min.js';
+    const ymdDate = '2012-04-12 10:03:15';
+    const gmtDate = new Date();
+    let ymdResult = xqtime.friend(ymdDate);
+    let gmtResult = xqtime.friend(gmtDate);
+    console.log('ymd result:', ymdResult);
+    console.log('gmt result:', gmtResult);
+</script>
 ```
 
 ## 提问题
