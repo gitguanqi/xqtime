@@ -16,11 +16,10 @@
   "keywords": [
     "time",
     "xqtime",
-    "date",
-    "formdata"
+    "date"
   ],
   "author": "gitguanqi",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/gitguanqi/xqtime/issues"
   },
