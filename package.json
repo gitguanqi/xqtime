@@ -1,13 +1,13 @@
 {
   "name": "xqtime",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "This is a js time-friendly plugin.",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "main": "dist/xqtime.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config ./webpack.config.js",
+    "dev:all": "node test/all.js",
+    "dev:one": "node test/one.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/gitguanqi/xqtime/issues"
   },
-  "homepage": "https://github.com/gitguanqi/xqtime#readme"
+  "homepage": "https://github.com/gitguanqi/xqtime#readme",
+  "devDependencies": {
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
 }

@@ -1,5 +1,5 @@
 // 引入xqtime
-const xqtime = require('../index');
+const xqtime = require('../lib/index');
 
 // 当前时间
 const now = new Date();

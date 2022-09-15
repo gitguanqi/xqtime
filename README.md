@@ -18,14 +18,7 @@ npm install xqtime
 
 ```html
 <!-- unkpg -->
-<!-- 1.nodejs -->
 <script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
-
-<!-- 2.es5 -->
-<script src="https://unpkg.com/xqtime/lib/xqtime-es5.min.js"></script>
-
-<!-- 3.es6 -->
-<script src="https://unpkg.com/xqtime/lib/xqtime-es6.min.js"></script>
 ```
 
 ### Introducing xqtime
@@ -126,14 +119,14 @@ console.log('millennium is:', millenniumResult); // millennium is: 1 thousand ye
 
 ```
 
-### How to use ES5
+### How to use
 
-Reference: test/es5.html
+Reference: test/index.html
 
 + Introduce js
 
 ```html
-<script src="https://unpkg.com/xqtime/lib/xqtime-es5.min.js"></script>
+<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
 ```
 
 + Call method
@@ -145,28 +138,6 @@ let ymdResult = xqtime.friend(ymdDate);
 let gmtResult = xqtime.friend(gmtDate);
 console.log('ymd result:', ymdResult);
 console.log('gmt result:', gmtResult);
-```
-
-### How to use ES6
-
-Reference: test/es6.html
-
-+ Introduce js
-
-Save js to the local `./js/xqtime-es6.min.js`;
-
-+ Call method
-
-```html
-<script type="module">
-     import xqtime from'./js/xqtime-es6.min.js';
-     const ymdDate = '2012-04-12 10:03:15';
-     const gmtDate = new Date();
-     let ymdResult = xqtime.friend(ymdDate);
-     let gmtResult = xqtime.friend(gmtDate);
-     console.log('ymd result:', ymdResult);
-     console.log('gmt result:', gmtResult);
-</script>
 ```
 
 ## ask questions
