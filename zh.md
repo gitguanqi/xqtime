@@ -23,7 +23,7 @@ npm install xqtime
 ```html
 <!-- unkpg -->
 <!-- 1.nodejs -->
-<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
+<script src="https://unpkg.com/xqtime/dist/xqtime.min.js"></script>
 ```
 
 ### 格式说明

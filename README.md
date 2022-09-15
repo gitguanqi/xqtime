@@ -18,7 +18,7 @@ npm install xqtime
 
 ```html
 <!-- unkpg -->
-<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
+<script src="https://unpkg.com/xqtime/dist/xqtime.min.js"></script>
 ```
 
 ### Introducing xqtime
@@ -126,7 +126,7 @@ Reference: test/index.html
 + Introduce js
 
 ```html
-<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
+<script src="https://unpkg.com/xqtime/dist/xqtime.min.js"></script>
 ```
 
 + Call method
