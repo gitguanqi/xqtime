@@ -14,7 +14,7 @@ npm install xqtime
 
 ### 引入xqtime
 
-+ npm
++ node
 
 `const xqtime = require('xqtime');`
 
@@ -23,7 +23,7 @@ npm install xqtime
 ```html
 <!-- unkpg -->
 <!-- 1.nodejs -->
-<script src="https://unpkg.com/xqtime/dist/xqtime.min.js"></script>
+<script src="https://unpkg.com/xqtime/dist/xqtime.js"></script>
 ```
 
 ### 格式说明
@@ -46,10 +46,11 @@ const gmtDate = new Date();
 
 + 1.一般案例
 
-`node ./test/index.js`;
+`npm run dev:all`;
+`npm run dev:one`;
 
 ```js
-// ./test/index.js
+// ./test/one.js
 // 调用friend方法
 const ymdDate = '2012-04-12 10:03:15';
 const gmtDate = new Date();
@@ -122,24 +123,21 @@ console.log('millennium is:', millenniumResult); // millennium is: 1千年前
 
 ### ES使用方法
 
-参照: test/index.html
++ 引入xqtime
 
-+ 引入js
-
-保存js到本地`./js/xqtime.min.js`;
+```html
+<script src="https://unpkg.com/xqtime/dist/xqtime.js"></script>
+```
 
 + 调用方法
 
-```html
-<script type="module">
-    import xqtime from './js/xqtime.min.js';
-    const ymdDate = '2012-04-12 10:03:15';
-    const gmtDate = new Date();
-    let ymdResult = xqtime.friend(ymdDate);
-    let gmtResult = xqtime.friend(gmtDate);
-    console.log('ymd result:', ymdResult);
-    console.log('gmt result:', gmtResult);
-</script>
+```js
+const ymdDate = '2012-04-12 10:03:15';
+const gmtDate = new Date();
+let ymdResult = xqtime.friend(ymdDate);
+let gmtResult = xqtime.friend(gmtDate);
+console.log('ymd result:', ymdResult);
+console.log('gmt result:', gmtResult);
 ```
 
 ## 提问题

@@ -1,5 +1,5 @@
 // 引入xqtime
-const xqtime = require('../lib/index');
+const xqtime = require('../dist/xqtime');
 
 // 年月日格式
 const ymdDate = '2012-04-12 10:03:15';

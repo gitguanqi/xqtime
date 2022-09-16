@@ -8,7 +8,7 @@ This is a js time-friendly plugin.
 
 ### Install xqtime
 
-+ npm
++ node
 
 ```sh
 npm install xqtime
@@ -18,7 +18,7 @@ npm install xqtime
 
 ```html
 <!-- unkpg -->
-<script src="https://unpkg.com/xqtime/dist/xqtime.min.js"></script>
+<script src="https://unpkg.com/xqtime/dist/xqtime.js"></script>
 ```
 
 ### Introducing xqtime
@@ -45,10 +45,11 @@ const gmtDate = new Date();
 
 + 1. General case
 
-`node ./test/index.js`;
+`npm run dev:all`;
+`npm run dev:one`;
 
 ```js
-// ./test/index.js
+// ./test/one.js
 // call the friend method
 const ymdDate = '2012-04-12 10:03:15';
 const gmtDate = new Date();
@@ -126,7 +127,7 @@ Reference: test/index.html
 + Introduce js
 
 ```html
-<script src="https://unpkg.com/xqtime/dist/xqtime.min.js"></script>
+<script src="https://unpkg.com/xqtime/dist/xqtime.js"></script>
 ```
 
 + Call method
