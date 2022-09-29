@@ -1,5 +1,4 @@
-// 引入xqtime
-const xqtime = require('../dist/xqtime');
+const xqtime = require('../lib/xqtime');
 
 // 当前时间
 const now = new Date();

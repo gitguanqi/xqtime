@@ -4,26 +4,32 @@ This is a js time-friendly plugin.
 
 [View Chinese documents](./zh.md)
 
-## Instructions
+## Install
 
-### Install xqtime
+**Browser**:
 
-+ node
+import cdn
+
+```html
+<!-- Browser -->
+<script src="../lib/xqtime.min.js"></script>
+<!-- es module -->
+<script type="module">
+    import xqtime from '../lib/xqtime-esm.min.js';
+</script>
+```
+
+**Node**:
 
 ```sh
 npm install xqtime
 ```
 
-+ cdn
-
-```html
-<!-- unkpg -->
-<script src="https://unpkg.com/xqtime/dist/xqtime.js"></script>
+```js
+const xqtime = require('xqtime');
 ```
 
-### Introducing xqtime
-
-`const xqtime = require('xqtime');`
+## Usage
 
 ### Format description
 
@@ -117,29 +123,11 @@ console.log('min is:', centuryResult); // min is: 1st century ago
 const millennium = '960-11-12 11:05:11';
 let millenniumResult = xqtime.friend(millennium);
 console.log('millennium is:', millenniumResult); // millennium is: 1 thousand years ago
-
 ```
 
-### How to use
+## View xqtime
 
-Reference: test/index.html
-
-+ Introduce js
-
-```html
-<script src="https://unpkg.com/xqtime/dist/xqtime.js"></script>
-```
-
-+ Call method
-
-```js
-const ymdDate = '2012-04-12 10:03:15';
-const gmtDate = new Date();
-let ymdResult = xqtime.friend(ymdDate);
-let gmtResult = xqtime.friend(gmtDate);
-console.log('ymd result:', ymdResult);
-console.log('gmt result:', gmtResult);
-```
+Run this script to view the demonstration case: `npm run test:node`, `npm run test:browser`.
 
 ## ask questions
 
