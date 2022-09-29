@@ -12,7 +12,7 @@ import cdn
 
 ```html
 <!-- Browser -->
-<script src="../lib/xqtime.min.js"></script>
+<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
 <!-- es module -->
 <script type="module">
     import xqtime from '../lib/xqtime-esm.min.js';
@@ -51,11 +51,7 @@ const gmtDate = new Date();
 
 + 1. General case
 
-`npm run dev:all`;
-`npm run dev:one`;
-
 ```js
-// ./test/one.js
 // call the friend method
 const ymdDate = '2012-04-12 10:03:15';
 const gmtDate = new Date();
@@ -76,10 +72,7 @@ console.log('gmt append:', gmtAppendResult); // gmt append: just now (11:19:52)
 
 + 2. All cases
 
-`node ./test/all.js`;
-
 ```js
-// ./test/all.js
 // current time
 const now = new Date();
 console.log('now is:', now); // now is: 2021-11-12T03:16:18.318Z

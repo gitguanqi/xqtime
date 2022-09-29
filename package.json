@@ -1,6 +1,6 @@
 {
   "name": "xqtime",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "This is a js time-friendly plugin.",
   "main": "lib/xqtime.js",
   "directories": {

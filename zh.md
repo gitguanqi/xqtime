@@ -12,7 +12,7 @@
 
 ```html
 <!-- 游览器es5 -->
-<script src="https://unpkg.com/lib/xqtime.min.js"></script>
+<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
 <!-- es6模块 -->
 <script type="module">
     import xqtime from './lib/xqtime-esm.min.js';
@@ -51,11 +51,7 @@ const gmtDate = new Date();
 
 + 1.一般案例
 
-`npm run dev:all`;
-`npm run dev:one`;
-
 ```js
-// ./test/one.js
 // 调用friend方法
 const ymdDate = '2012-04-12 10:03:15';
 const gmtDate = new Date();
@@ -76,10 +72,7 @@ console.log('gmt append: ', gmtAppendResult); // gmt append:  刚刚(11:19:52)
 
 + 2.全部案例
 
-`node ./test/all.js`;
-
 ```js
-// ./test/all.js
 // 当前时间
 const now = new Date();
 console.log('now is:', now); // now is: 2021-11-12T03:16:18.318Z
