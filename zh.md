@@ -125,8 +125,8 @@ console.log('millennium is:', millenniumResult); // millennium is: 1千年前
 
 ## 提问题
 
-[submit your question](https://github.com/xxx/xqtime/issues/new)
+[提交问题](https://github.com/gitguanqi/xqtime/issues/new)
 
 ## 作者
 
-[@xxx](https://github.com/xxx)
+[@gitguanqi](https://github.com/gitguanqi)
