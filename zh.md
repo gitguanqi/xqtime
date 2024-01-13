@@ -12,7 +12,7 @@
 
 ```html
 <!-- 游览器es5 -->
-<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
+<script src="https://xqgj.cc/xqcdn/libs/xqtime/xqtime.min.js"></script>
 <!-- es6模块 -->
 <script type="module">
     import xqtime from './lib/xqtime-esm.min.js';

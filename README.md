@@ -12,7 +12,7 @@ import cdn
 
 ```html
 <!-- Browser -->
-<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
+<script src="https://xqgj.cc/xqcdn/libs/xqtime/xqtime.min.js"></script>
 <!-- es module -->
 <script type="module">
     import xqtime from '../lib/xqtime-esm.min.js';
