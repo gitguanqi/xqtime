@@ -1,25 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" data-demo-status="pending">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xqtime amd test</title>
+    <title>xqtime amd 测试（AMD）</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23a51d2d'/%3E%3Cpath d='M4 4l8 8M12 4l-8 8' stroke='%23fff' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="demo.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/require.js/2.3.6/require.min.js"></script>
 </head>
+
 <body>
-    <h3>xqtime amd test</h3>
+    <div class="wrap">
+        <h1>xqtime amd 测试</h1>
+        <p class="subtitle">通过 RequireJS 以 AMD 方式加载 <code>../lib/xqtime.js</code>（其 UMD 分支会走 <code>define</code>）</p>
+
+        <p id="status" class="status" data-status="pending">PENDING · 等待 RequireJS…</p>
+
+        <ul id="checks" class="checks"></ul>
+
+        <h2>输出演示</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>相对当前时间</th>
+                    <th>friend(t)</th>
+                    <th>friend(t, true)</th>
+                </tr>
+            </thead>
+            <tbody id="demo-body"></tbody>
+        </table>
+        <p>
+            <button id="recompute" type="button">重新计算</button>
+        </p>
+
+        <p class="nav">
+            <a href="index.html">返回索引</a>
+            <a href="browser.html">UMD 测试</a>
+            <a href="esm.html">ESM 测试</a>
+        </p>
+    </div>
+
+    <script src="demo-runner.js"></script>
     <script>
-        requirejs.config({
-            baseUrl: './',
-            paths: {
-                'amd': './amd',
+        (function () {
+            var settled = false;
+
+            function fail(message) {
+                if (settled) return;
+                settled = true;
+                // 拿不到 friend 也要给出可见的 FAIL，而不是停在 PENDING
+                window.xqtimeDemoRun('AMD', null);
+                var status = document.getElementById('status');
+                if (status) {
+                    status.textContent = status.textContent + '（' + message + '）';
+                }
             }
-        });
-        requirejs(['amd'], function(){
-            console.log('This is a index.html, require amd success!');
-        })
+
+            if (typeof requirejs !== 'function') {
+                fail('RequireJS 未加载成功（CDN 不可达？）');
+                return;
+            }
+
+            requirejs.config({
+                baseUrl: './',
+                paths: { amd: './amd' }
+            });
+
+            requirejs(['amd'], function (xqtime) {
+                if (settled) return;
+                settled = true;
+                window.xqtimeDemoRun('AMD', xqtime && xqtime.friend);
+                window.xqtimeDemoRender(xqtime && xqtime.friend);
+            }, function (error) {
+                fail('模块加载失败：' + (error && error.requireType || '未知原因'));
+            });
+
+            // 兜底：8 秒后仍未完成则判 FAIL，页面永远不停在 PENDING
+            setTimeout(function () { fail('加载超时'); }, 8000);
+        })();
     </script>
 </body>
+
 </html>
-                

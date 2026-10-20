@@ -1,45 +1,84 @@
+/**
+ * Node 消费路径的快速自检（npm run test:node）。
+ *
+ * 这是人肉可读的冒烟脚本，不是完整测试套件——完整断言在 test/unit.test.mjs
+ * 与 test/artifacts.test.mjs，用 `npm test` 运行。
+ * 所有期望值都由 Date.now() 推算，不会随时间推移而失真。
+ */
+const assert = require('node:assert');
 const xqtime = require('../lib/xqtime');
 
-// 当前时间
-const now = new Date();
-console.log('now is:', now); // now is: 2021-11-12T03:16:18.318Z
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+const YEAR = 365 * DAY;
 
-// 刚刚
-const just = new Date();
-let justResult = xqtime.friend(just);
-console.log('just is:', justResult); // just is: 刚刚
+let failed = 0;
 
-// 分钟
-const min = '2021-11-12 11:05:11';
-let minResult = xqtime.friend(min);
-console.log('min is:', minResult); // min is: 12分钟前
+function check(label, actual, expected) {
+    try {
+        assert.strictEqual(actual, expected);
+        console.log(`PASS  ${label}  ->  ${actual}`);
+    } catch {
+        failed += 1;
+        console.log(`FAIL  ${label}  ->  期望 ${expected}，实际 ${actual}`);
+    }
+}
 
-// 时
-const hour = '2021-11-12 05:05:11';
-let hourResult = xqtime.friend(hour);
-console.log('hour is:', hourResult); // hour is: 6小时前
+const pad = (value) => (value < 10 ? '0' + value : String(value));
 
-// 天
-const day = '2021-11-08 11:05:11';
-let dayResult = xqtime.friend(day);
-console.log('day is:', dayResult); // day is: 4天前
+// 附带时间里的日期部分，按本地分量推算
+function datePartOf(result) {
+    return result.slice(result.indexOf('(') + 1, result.length - 1);
+}
 
-// 月
-const mon = '2021-05-12 11:05:11';
-let monResult = xqtime.friend(mon);
-console.log('mon is:', monResult); // mon is: 6月前
+function expectedDatePart(date) {
+    const year = date.getFullYear() < 0
+        ? '-' + String(-date.getFullYear()).padStart(6, '0')
+        : String(date.getFullYear()).padStart(4, '0');
+    return `${year}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
 
-// 年
-const year = '2012-11-12 11:05:11';
-let yearResult = xqtime.friend(year);
-console.log('year is:', yearResult); // year is: 9年前
+function expectedYears(date) {
+    return Math.floor((Date.now() - date.getTime()) / YEAR) + '年前';
+}
 
-// 世纪
-const century = '1920-11-12 11:05:11';
-let centuryResult = xqtime.friend(century);
-console.log('min is:', centuryResult); // min is: 1世纪前
+console.log('require("../lib/xqtime") =', typeof xqtime, Object.keys(xqtime));
+console.log('');
 
-// 千年
-const millennium = '960-11-12 11:05:11';
-let millenniumResult = xqtime.friend(millennium);
-console.log('millennium is:', millenniumResult); // millennium is: 1千年前
+check('省略入参', xqtime.friend(), '刚刚');
+check('30 秒前', xqtime.friend(Date.now() - 30 * SECOND), '刚刚');
+check('12 分钟前', xqtime.friend(Date.now() - 12 * MINUTE), '12分钟前');
+check('3 小时前', xqtime.friend(Date.now() - 3 * HOUR), '3小时前');
+check('2 天前', xqtime.friend(Date.now() - 2 * DAY), '2天前');
+check('3 个月前', xqtime.friend(Date.now() - 90 * DAY), '3月前');
+check('2 年前', xqtime.friend(Date.now() - 2 * YEAR), '2年前');
+
+// 附带时间：日的取值与月份补零是 0.2.0 修掉的两个缺陷
+const fixed = new Date(2021, 9, 5, 10, 3, 15); // 2021-10-05 10:03:15 本地时间
+check('Date 入参的相对部分', xqtime.friend(fixed), expectedYears(fixed));
+check('Date 入参 + append 的日期部分', datePartOf(xqtime.friend(fixed, true)), expectedDatePart(fixed));
+check('时间戳入参与 Date 入参一致', xqtime.friend(fixed.getTime(), true), xqtime.friend(fixed, true));
+
+// 字符串按本地时区解析：'2021-10-05' 不应被当成 UTC 零点
+const fromString = xqtime.friend('2021-10-05 10:03:15', true);
+check('字符串入参 + append 的日期部分', datePartOf(fromString), '2021-10-05');
+
+// 非法入参
+try {
+    xqtime.friend('not-a-date');
+    failed += 1;
+    console.log('FAIL  非法入参应抛 TypeError，实际没有抛错');
+} catch (error) {
+    if (error instanceof TypeError) {
+        console.log(`PASS  非法入参抛 TypeError  ->  ${error.message}`);
+    } else {
+        failed += 1;
+        console.log(`FAIL  期望 TypeError，实际 ${error.constructor.name}`);
+    }
+}
+
+console.log('');
+console.log(failed === 0 ? '全部通过' : `${failed} 项失败`);
+process.exitCode = failed === 0 ? 0 : 1;

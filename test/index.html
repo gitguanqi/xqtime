@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xqtime 测试索引</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231f2933'/%3E%3Ccircle cx='8' cy='8' r='4' fill='%23fff'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="demo.css">
+</head>
+
+<body>
+    <div class="wrap">
+        <h1>xqtime 测试索引</h1>
+        <p class="subtitle">三个模块格式的页面级自检。每张卡片内嵌对应页面并实时显示其 PASS / FAIL 状态。</p>
+
+        <div class="card-list">
+            <a class="card" href="browser.html" id="card-browser">
+                <span class="card-title">browser（UMD）</span>
+                <span class="card-desc">script 标签 + window.xqtime</span>
+                <span class="badge" data-role="badge">PENDING</span>
+            </a>
+            <a class="card" href="esm.html" id="card-esm">
+                <span class="card-title">esm（ES Module）</span>
+                <span class="card-desc">import default + 命名导出</span>
+                <span class="badge" data-role="badge">PENDING</span>
+            </a>
+            <a class="card" href="amd.html" id="card-amd">
+                <span class="card-title">amd（AMD）</span>
+                <span class="card-desc">RequireJS + define 分支</span>
+                <span class="badge" data-role="badge">PENDING</span>
+            </a>
+        </div>
+
+        <p class="subtitle" style="margin-top:16px;">
+            页面需要通过 <code>npm run test:browser</code>（node scripts/serve.mjs）访问，
+            直接双击打开会因 ES Module 的 file:// 限制而失败。
+        </p>
+    </div>
+
+    <script>
+        (function () {
+            var pages = [
+                { id: 'card-browser', page: 'browser.html' },
+                { id: 'card-esm', page: 'esm.html' },
+                { id: 'card-amd', page: 'amd.html' }
+            ];
+
+            function paint(card, status, passed, total) {
+                var badge = card.querySelector('[data-role="badge"]');
+                if (!badge) return;
+                badge.textContent = status.toUpperCase() + ' ' + passed + '/' + total;
+                badge.style.background = status === 'passed' ? 'var(--pass-bg)' : 'var(--fail-bg)';
+                badge.style.color = status === 'passed' ? 'var(--pass)' : 'var(--fail)';
+            }
+
+            pages.forEach(function (entry) {
+                var card = document.getElementById(entry.id);
+                var frame = document.createElement('iframe');
+                frame.src = entry.page;
+                frame.width = '100%';
+                frame.height = '220';
+                frame.style.cssText = 'border:1px solid var(--line);border-radius:8px;margin-top:8px;';
+                frame.addEventListener('load', function () {
+                    try {
+                        var doc = frame.contentDocument;
+                        var status = doc && doc.documentElement.dataset.demoStatus;
+                        var summary = doc && doc.getElementById('status');
+                        var match = summary && /(\d+) \/ (\d+)/.exec(summary.textContent);
+                        paint(card, status || 'failed', match ? match[1] : '?', match ? match[2] : '?');
+                    } catch (error) {
+                        paint(card, 'failed', '?', '?');
+                    }
+                });
+                card.after(frame);
+            });
+        })();
+    </script>
+</body>
+
+</html>

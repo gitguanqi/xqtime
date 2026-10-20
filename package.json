@@ -1,30 +1,60 @@
 {
   "name": "xqtime",
-  "version": "0.1.0",
-  "description": "This is a js time-friendly plugin.",
+  "version": "0.2.0",
+  "description": "Friendly relative time labels (刚刚 / 12分钟前 / 3天前) from a Date, a timestamp or a date string.",
   "main": "lib/xqtime.js",
-  "directories": {
-      "lib": "lib",
-      "test": "test"
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./lib/xqtime-esm.mjs",
+      "require": "./lib/xqtime.js",
+      "default": "./lib/xqtime.js"
+    },
+    "./lib/xqtime": "./lib/xqtime.js",
+    "./lib/xqtime.min": "./lib/xqtime.min.js",
+    "./lib/xqtime-esm": "./lib/xqtime-esm.js",
+    "./lib/xqtime-esm.min": "./lib/xqtime-esm.min.js",
+    "./lib/*": "./lib/*",
+    "./package.json": "./package.json"
+  },
+  "unpkg": "lib/xqtime.min.js",
+  "jsdelivr": "lib/xqtime.min.js",
+  "files": [
+    "lib",
+    "index.d.ts",
+    "zh.md",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=14.13.0"
   },
   "scripts": {
-      "test": "echo Error: no test specified && exit 1",
-      "test:node": "node test/node.js",
-      "test:browser": "live-server --port=4001 --host=localhost"
+    "build": "node scripts/build.mjs",
+    "build:check": "node scripts/build.mjs --check",
+    "test": "node scripts/build.mjs --check && node --test test/unit.test.mjs test/artifacts.test.mjs test/pages.test.mjs",
+    "test:node": "node test/node.js",
+    "test:browser": "node scripts/serve.mjs",
+    "prepublishOnly": "node scripts/build.mjs --check"
   },
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/gitguanqi/xqtime.git"
+    "type": "git",
+    "url": "git+https://github.com/gitguanqi/xqtime.git"
   },
   "keywords": [
-      "time",
-      "date",
-      "xqtime"
+    "time",
+    "date",
+    "relative-time",
+    "timeago",
+    "xqtime"
   ],
   "author": "gitguanqi",
   "license": "MIT",
   "bugs": {
-      "url": "https://github.com/gitguanqi/xqtime/issues"
+    "url": "https://github.com/gitguanqi/xqtime/issues"
   },
-  "homepage": "https://github.com/gitguanqi/xxx#readme"
+  "homepage": "https://github.com/gitguanqi/xqtime#readme",
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
 }

@@ -1,0 +1,206 @@
+/* xqtime 测试页面共享样式：PENDING / PASS / FAIL 三态，纯 CSS 无依赖 */
+
+:root {
+    color-scheme: light;
+    --bg: #f5f7fa;
+    --panel: #ffffff;
+    --ink: #1f2933;
+    --muted: #6b7785;
+    --line: #d9e2ec;
+    --pass: #0f7b38;
+    --pass-bg: #e6f6ec;
+    --fail: #c02425;
+    --fail-bg: #fdecec;
+    --pending: #8a6d1a;
+    --pending-bg: #fdf6e0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 24px 16px 48px;
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+}
+
+.wrap {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 22px;
+    margin: 0 0 4px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 16px;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    background: var(--pending-bg);
+    color: var(--pending);
+    border: 1px solid currentColor;
+    margin-bottom: 16px;
+}
+
+.status[data-status="passed"] {
+    background: var(--pass-bg);
+    color: var(--pass);
+}
+
+.status[data-status="failed"] {
+    background: var(--fail-bg);
+    color: var(--fail);
+}
+
+.checks {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    overflow: hidden;
+}
+
+.check {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+}
+
+.check:last-child {
+    border-bottom: none;
+}
+
+.badge {
+    flex: none;
+    min-width: 46px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    border-radius: 4px;
+    padding: 1px 6px;
+}
+
+.check.is-pass .badge {
+    background: var(--pass-bg);
+    color: var(--pass);
+}
+
+.check.is-fail .badge {
+    background: var(--fail-bg);
+    color: var(--fail);
+}
+
+.check-name {
+    flex: 1;
+}
+
+.check-detail {
+    color: var(--muted);
+    font-size: 12px;
+    text-align: right;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+th,
+td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+}
+
+th {
+    background: #eef2f7;
+    font-size: 13px;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+button {
+    font: inherit;
+    padding: 6px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    cursor: pointer;
+}
+
+button:hover {
+    background: #eef2f7;
+}
+
+.nav {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.nav a {
+    color: #1a5fb4;
+    margin-right: 16px;
+}
+
+/* index 页网格 */
+.card-list {
+    display: grid;
+    gap: 12px;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card:hover {
+    border-color: #9fb3c8;
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+.card-desc {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.card .badge {
+    margin-left: auto;
+    min-width: 58px;
+}

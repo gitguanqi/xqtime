@@ -1,131 +1,146 @@
 # xqtime
 
-This is a js time-friendly plugin.
+Friendly, human-readable time labels — `刚刚` / `12分钟前` / `3天前` / `2年前` — from a `Date`,
+a timestamp, or a date string. Zero dependencies, one function.
 
-[View Chinese documents](./zh.md)
+[中文文档](./zh.md)
 
 ## Install
 
-**Browser**:
-
-import cdn
+**Browser (global build, UMD)**
 
 ```html
-<!-- Browser -->
-<script src="https://xqgj.cc/xqcdn/libs/xqtime/xqtime.min.js"></script>
-<!-- es module -->
-<script type="module">
-    import xqtime from '../lib/xqtime-esm.min.js';
+<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
+<script>
+  xqtime.friend(Date.now() - 86400000); // "1天前"
 </script>
 ```
 
-**Node**:
+**Browser (ES module)**
+
+```html
+<script type="module">
+  import xqtime from 'https://unpkg.com/xqtime/lib/xqtime-esm.min.mjs';
+  console.log(xqtime.friend(Date.now() - 3600000)); // "1小时前"
+</script>
+```
+
+**Node / bundlers**
 
 ```sh
 npm install xqtime
 ```
 
 ```js
-const xqtime = require('xqtime');
+const xqtime = require('xqtime');          // CommonJS
 ```
+
+```js
+import xqtime, { friend } from 'xqtime';   // ESM (default and named export are the same function)
+```
+
+AMD and CMD are supported by the same UMD build.
 
 ## Usage
 
-### Format description
+`friend(time, append)` returns a relative-time string.
 
-+ Year month day format
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `time` | `Date` \| `number` \| `string` | now | Target time. A number is a millisecond timestamp. A string accepts `YYYY-MM-DD`, `YYYY-MM-DD HH:mm:ss`, `YYYY-MM-DDTHH:mm:ss`, or anything `Date.parse` understands. |
+| `append` | `boolean` | `false` | When true, the concrete time is appended in parentheses: `3天前(10-19)`. |
 
-```js
-const ymdDate = '2012-04-12 10:03:15';
-// 2012-04-12 10:03:15
-```
-
-+ GMT format
+### Input formats
 
 ```js
-const gmtDate = new Date();
-// Fri Nov 12 2021 10:20:54 GMT+0800 (中国标准时间)
+xqtime.friend('2012-04-12 10:03:15'); // date string, parsed in local time
+xqtime.friend('2012-04-12');          // date only → local midnight (not UTC)
+xqtime.friend(1365780195000);         // millisecond timestamp
+xqtime.friend(new Date());            // Date object
+xqtime.friend();                      // omitted → current time
 ```
 
-### Use Cases
+### Examples
 
-+ 1. General case
+Every example below computes the time from `Date.now()`, so the outputs stay correct over time.
 
 ```js
-// call the friend method
-const ymdDate = '2012-04-12 10:03:15';
-const gmtDate = new Date();
-let ymdResult = xqtime.friend(ymdDate);
-let gmtResult = xqtime.friend(gmtDate);
-console.log('ymd result:', ymdResult);
-console.log('gmt result:', gmtResult);
-// ymd result: 9 years ago
-// gmt result: just now
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+const YEAR = 365 * DAY;
 
-
-// Attachment time
-let ymdAppendResult = xqtime.friend(ymdDate, true);
-let gmtAppendResult = xqtime.friend(gmtDate, true);
-console.log('ymd append:', ymdAppendResult); // ymd append: 9 years ago (2012-03-04)
-console.log('gmt append:', gmtAppendResult); // gmt append: just now (11:19:52)
+xqtime.friend(Date.now() - 30 * SECOND);      // '刚刚'
+xqtime.friend(Date.now() - 12 * MINUTE);      // '12分钟前'
+xqtime.friend(Date.now() - 3 * HOUR);         // '3小时前'
+xqtime.friend(Date.now() - 2 * DAY);          // '2天前'
+xqtime.friend(Date.now() - 3 * 30 * DAY);     // '3月前'
+xqtime.friend(Date.now() - 2 * YEAR);         // '2年前'
+xqtime.friend(Date.now() - 150 * YEAR);       // '1世纪前'
 ```
 
-+ 2. All cases
+With `append = true`:
 
 ```js
-// current time
-const now = new Date();
-console.log('now is:', now); // now is: 2021-11-12T03:16:18.318Z
-
-// just
-const just = new Date();
-let justResult = xqtime.friend(just);
-console.log('just is:', justResult); // just is: just
-
-// minute
-const min = '2021-11-12 11:05:11';
-let minResult = xqtime.friend(min);
-console.log('min is:', minResult); // min is: 12 minutes ago
-
-// Time
-const hour = '2021-11-12 05:05:11';
-let hourResult = xqtime.friend(hour);
-console.log('hour is:', hourResult); // hour is: 6 hours ago
-
-// day
-const day = '2021-11-08 11:05:11';
-let dayResult = xqtime.friend(day);
-console.log('day is:', dayResult); // day is: 4 days ago
-
-// moon
-const mon = '2021-05-12 11:05:11';
-let monResult = xqtime.friend(mon);
-console.log('mon is:', monResult); // mon is: 6 months ago
-
-// year
-const year = '2012-11-12 11:05:11';
-let yearResult = xqtime.friend(year);
-console.log('year is:', yearResult); // year is: 9 years ago
-
-// century
-const century = '1920-11-12 11:05:11';
-let centuryResult = xqtime.friend(century);
-console.log('min is:', centuryResult); // min is: 1st century ago
-
-// Millennium
-const millennium = '960-11-12 11:05:11';
-let millenniumResult = xqtime.friend(millennium);
-console.log('millennium is:', millenniumResult); // millennium is: 1 thousand years ago
+xqtime.friend(new Date(), true);              // '刚刚(14:05:32)'
+xqtime.friend(Date.now() - 2 * DAY, true);    // '2天前(10-19)'
+xqtime.friend(Date.now() - 2 * YEAR, true);   // '2年前(2024-10-21)'
 ```
 
-## View xqtime
+The appended format depends on the level: `HH:mm:ss` for under an hour, `MM-DD` for days and
+months, `YYYY-MM-DD` for a year and older. Years are always zero-padded to four digits, so a
+960 AD date renders as `0960-11-12`.
 
-Run this script to view the demonstration case: `npm run test:node`, `npm run test:browser`.
+## Thresholds and boundaries
 
-## ask questions
+| Time difference | Output | Appended time |
+| --- | --- | --- |
+| `< 60s` | `刚刚` | `HH:mm:ss` |
+| `< 1h` | `N分钟前` | `HH:mm:ss` |
+| `< 1d` | `N小时前` | `HH:mm:ss` |
+| `< 30d` | `N天前` | `MM-DD` |
+| `< 365d` | `N月前` | `MM-DD` |
+| `< 100y` | `N年前` | `YYYY-MM-DD` |
+| `< 1000y` | `N世纪前` | `YYYY-MM-DD` |
+| `< 10000y` | `N千年前` | `YYYY-MM-DD` |
+| `>= 10000y` | `N万年前` | `YYYY-MM-DD` |
 
-[submit your question](https://github.com/gitguanqi/xqtime/issues/new)
+Notes on the contract:
 
-## Author
+- A month is 30 days and a year is 365 days. No calendar arithmetic is performed, so the level
+  is a pure duration comparison — this keeps the function cheap and timezone-free.
+- Boundaries are exclusive: exactly `60000ms` is `1分钟前`, `59999ms` is `刚刚`.
+- A future time is reported as `刚刚` rather than a negative value.
+- The `亿年前` level exists in the label table but is unreachable: `Date` tops out around
+  ±275,000 years.
 
-[@gitguanqi](https://github.com/gitguanqi)
+## Invalid input
+
+Values other than `Date`, a finite number, a parsable string, or `undefined` throw a `TypeError`
+instead of returning a broken string:
+
+```js
+xqtime.friend('not-a-date'); // TypeError: xqtime: 无法解析的时间字符串 "not-a-date"
+xqtime.friend(null);         // TypeError: xqtime: 不支持的时间类型 [object Null]
+xqtime.friend('2021-02-30'); // TypeError: xqtime: 时间字符串的月日时分秒超出有效范围
+```
+
+> Before 0.2.0 these inputs silently produced `NaNundefined`. If you relied on that, wrap the
+> call or validate the input first.
+
+## Development
+
+```sh
+npm install
+npm test              # build drift check + unit tests + artifact contract tests
+npm run build         # regenerate lib/ from src/xqtime.js
+npm run test:browser  # zero-dependency static server for test/*.html
+```
+
+`lib/` is generated — edit `src/xqtime.js` and rebuild. `npm test` fails if the committed
+bundles drift from the source.
+
+## License
+
+MIT · [@gitguanqi](https://github.com/gitguanqi) · [submit an issue](https://github.com/gitguanqi/xqtime/issues/new)

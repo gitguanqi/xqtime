@@ -40,7 +40,6 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-package-lock.json
 *.sh
 
 # TypeScript v1 declaration files
@@ -104,3 +103,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# WorkBuddy workspace data
+.workbuddy/
+
+# Temporary verification artifacts
+.tmp/

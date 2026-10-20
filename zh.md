@@ -1,132 +1,141 @@
 # xqtime
 
-这是一个js时间友好化插件。
+把时间转成「刚刚 / 12分钟前 / 3天前 / 2年前」这类友好文案。零依赖，只有一个函数。
 
-[查看英文文档](./README.md)
+[English documents](./README.md)
 
 ## 安装
 
-**游览器端**:
-
-引入cdn
+**浏览器（全局构建，UMD）**
 
 ```html
-<!-- 游览器es5 -->
-<script src="https://xqgj.cc/xqcdn/libs/xqtime/xqtime.min.js"></script>
-<!-- es6模块 -->
-<script type="module">
-    import xqtime from './lib/xqtime-esm.min.js';
+<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
+<script>
+  xqtime.friend(Date.now() - 86400000); // "1天前"
 </script>
 ```
 
-**Node**:
+**浏览器（ES 模块）**
+
+```html
+<script type="module">
+  import xqtime from 'https://unpkg.com/xqtime/lib/xqtime-esm.min.mjs';
+  console.log(xqtime.friend(Date.now() - 3600000)); // "1小时前"
+</script>
+```
+
+产物语法级别为 ES2015+（不是 ES5）。
+
+**Node / 打包工具**
 
 ```sh
 npm install xqtime
 ```
 
 ```js
-const xqtime = require('xqtime');
+const xqtime = require('xqtime');          // CommonJS
 ```
+
+```js
+import xqtime, { friend } from 'xqtime';   // ESM，默认导出与命名导出是同一个函数
+```
+
+同一份 UMD 产物同时支持 AMD 与 CMD。
 
 ## 使用
 
-### 格式说明
+`friend(time, append)` 返回相对时间文案。
 
-+ 年月日格式
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `time` | `Date` \| `number` \| `string` | 当前时间 | 目标时间。数字为毫秒时间戳；字符串支持 `YYYY-MM-DD`、`YYYY-MM-DD HH:mm:ss`、`YYYY-MM-DDTHH:mm:ss`，其余交给 `Date.parse`。 |
+| `append` | `boolean` | `false` | 为真时在括号内附带具体时间，如 `3天前(10-19)`。 |
 
-```js
-const ymdDate = '2012-04-12 10:03:15';
-// 2012-04-12 10:03:15
-```
-
-+ GMT格式
+### 支持的格式
 
 ```js
-const gmtDate = new Date();
-// Fri Nov 12 2021 10:20:54 GMT+0800 (中国标准时间)
+xqtime.friend('2012-04-12 10:03:15'); // 时间字符串，按本地时区解析
+xqtime.friend('2012-04-12');          // 只有日期 → 本地零点（不是 UTC 零点）
+xqtime.friend(1365780195000);         // 毫秒时间戳
+xqtime.friend(new Date());            // Date 对象
+xqtime.friend();                      // 省略入参 → 当前时间
 ```
 
 ### 使用案例
 
-+ 1.一般案例
+下面所有示例都用 `Date.now()` 推算时间，因此输出不会随时间推移而失真。
 
 ```js
-// 调用friend方法
-const ymdDate = '2012-04-12 10:03:15';
-const gmtDate = new Date();
-let ymdResult = xqtime.friend(ymdDate);
-let gmtResult = xqtime.friend(gmtDate);
-console.log('ymd result: ', ymdResult);
-console.log('gmt result: ', gmtResult);
-// ymd result:  9年前
-// gmt result:  刚刚
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+const YEAR = 365 * DAY;
 
-
-// 附件时间
-let ymdAppendResult = xqtime.friend(ymdDate, true);
-let gmtAppendResult = xqtime.friend(gmtDate, true);
-console.log('ymd append: ', ymdAppendResult); // ymd append:  9年前(2012-03-04)
-console.log('gmt append: ', gmtAppendResult); // gmt append:  刚刚(11:19:52)
+xqtime.friend(Date.now() - 30 * SECOND);      // '刚刚'
+xqtime.friend(Date.now() - 12 * MINUTE);      // '12分钟前'
+xqtime.friend(Date.now() - 3 * HOUR);         // '3小时前'
+xqtime.friend(Date.now() - 2 * DAY);          // '2天前'
+xqtime.friend(Date.now() - 3 * 30 * DAY);     // '3月前'
+xqtime.friend(Date.now() - 2 * YEAR);         // '2年前'
+xqtime.friend(Date.now() - 150 * YEAR);       // '1世纪前'
 ```
 
-+ 2.全部案例
+`append = true`：
 
 ```js
-// 当前时间
-const now = new Date();
-console.log('now is:', now); // now is: 2021-11-12T03:16:18.318Z
-
-// 刚刚
-const just = new Date();
-let justResult = xqtime.friend(just);
-console.log('just is:', justResult); // just is: 刚刚
-
-// 分钟
-const min = '2021-11-12 11:05:11';
-let minResult = xqtime.friend(min);
-console.log('min is:', minResult); // min is: 12分钟前
-
-// 时
-const hour = '2021-11-12 05:05:11';
-let hourResult = xqtime.friend(hour);
-console.log('hour is:', hourResult); // hour is: 6小时前
-
-// 天
-const day = '2021-11-08 11:05:11';
-let dayResult = xqtime.friend(day);
-console.log('day is:', dayResult); // day is: 4天前
-
-// 月
-const mon = '2021-05-12 11:05:11';
-let monResult = xqtime.friend(mon);
-console.log('mon is:', monResult); // mon is: 6月前
-
-// 年
-const year = '2012-11-12 11:05:11';
-let yearResult = xqtime.friend(year);
-console.log('year is:', yearResult); // year is: 9年前
-
-// 世纪
-const century = '1920-11-12 11:05:11';
-let centuryResult = xqtime.friend(century);
-console.log('min is:', centuryResult); // min is: 1世纪前
-
-// 千年
-const millennium = '960-11-12 11:05:11';
-let millenniumResult = xqtime.friend(millennium);
-console.log('millennium is:', millenniumResult); // millennium is: 1千年前
-
+xqtime.friend(new Date(), true);              // '刚刚(14:05:32)'
+xqtime.friend(Date.now() - 2 * DAY, true);    // '2天前(10-19)'
+xqtime.friend(Date.now() - 2 * YEAR, true);   // '2年前(2024-10-21)'
 ```
 
-## 查看示例
+附带格式随档位变化：一小时以内为 `HH:mm:ss`，天与月为 `MM-DD`，一年及更早为
+`YYYY-MM-DD`。年份固定补足 4 位，因此公元 960 年显示为 `0960-11-12`。
 
-运行这个脚本查看展示案例：`npm run test:node`, `npm run test:browser`。
+## 阈值与边界
 
-## 提问题
+| 时间差 | 文案 | 附带时间 |
+| --- | --- | --- |
+| `< 60 秒` | `刚刚` | `HH:mm:ss` |
+| `< 1 小时` | `N分钟前` | `HH:mm:ss` |
+| `< 1 天` | `N小时前` | `HH:mm:ss` |
+| `< 30 天` | `N天前` | `MM-DD` |
+| `< 365 天` | `N月前` | `MM-DD` |
+| `< 100 年` | `N年前` | `YYYY-MM-DD` |
+| `< 1000 年` | `N世纪前` | `YYYY-MM-DD` |
+| `< 1 万年` | `N千年前` | `YYYY-MM-DD` |
+| `>= 1 万年` | `N万年前` | `YYYY-MM-DD` |
 
-[提交问题](https://github.com/gitguanqi/xqtime/issues/new)
+契约要点：
 
-## 作者
+- 1 月按 30 天、1 年按 365 天计算，不做日历运算，档位只取决于时长，因此函数开销很小且不受时区影响。
+- 边界为左闭右开：恰好 `60000ms` 才是 `1分钟前`，`59999ms` 仍是 `刚刚`。
+- 未来时间统一显示为 `刚刚`，不会出现负数。
+- `亿年前` 档位保留在文案表中但实际不可达：`Date` 的上限约为 ±27.5 万年。
 
-[@gitguanqi](https://github.com/gitguanqi)
+## 非法入参
+
+除 `Date`、有限数字、可解析字符串与 `undefined` 之外，其余入参一律抛 `TypeError`，不再返回坏字符串：
+
+```js
+xqtime.friend('not-a-date'); // TypeError: xqtime: 无法解析的时间字符串 "not-a-date"
+xqtime.friend(null);         // TypeError: xqtime: 不支持的时间类型 [object Null]
+xqtime.friend('2021-02-30'); // TypeError: xqtime: 时间字符串的月日时分秒超出有效范围
+```
+
+> 0.2.0 之前这些入参会静默返回 `NaNundefined`。如果你的代码依赖了这个行为，请先做入参校验。
+
+## 开发
+
+```sh
+npm install
+npm test              # 产物漂移检查 + 单元测试 + 产物契约测试
+npm run build         # 从 src/xqtime.js 重新生成 lib/
+npm run test:browser  # 启动零依赖静态服务器，打开 test/*.html
+```
+
+`lib/` 是生成目录，请改 `src/xqtime.js` 后重新构建；源码与提交产物不一致时 `npm test` 会失败。
+
+## 许可证
+
+MIT · [@gitguanqi](https://github.com/gitguanqi) · [提交问题](https://github.com/gitguanqi/xqtime/issues/new)
