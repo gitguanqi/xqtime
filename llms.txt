@@ -1,0 +1,78 @@
+# xqtime
+
+A zero-dependency utility that converts a Date, millisecond timestamp, or date string into friendly Chinese relative-time text.
+
+## Install
+
+```sh
+npm install xqtime
+```
+
+## Imports
+
+```js
+import xqtime, { friend } from 'xqtime';
+const { friend: commonJsFriend } = require('xqtime');
+```
+
+The default export is `{ friend }`; the named export `friend` and `xqtime.friend` are the same function. The UMD build exposes `globalThis.xqtime`.
+
+## Exported API
+
+- `friend(time?: TimeInput, append = false): string`
+  Returns the relative-time label. The exported names `friend`, `xqtime.friend`, and the CommonJS property all refer to this function.
+- `TimeInput`
+  A public TypeScript type equal to `Date | number | string`.
+- `Friend`
+  The callable interface for `friend`.
+- `XqTime`
+  The default export shape `{ friend: Friend }`.
+
+## Key Options
+
+- `time`: omitted uses `Date.now()`. Numbers are millisecond timestamps; Date objects must be valid.
+- `time` strings support local-time `YYYY-MM-DD`, `YYYY-MM-DD HH:mm:ss`, and `YYYY-MM-DDTHH:mm:ss`; other non-empty strings use `Date.parse`.
+- `append`: when true, appends the concrete time in parentheses. Under one hour uses `HH:mm:ss`, days and months use `MM-DD`, and years use `YYYY-MM-DD`.
+- Invalid strings, non-finite numbers, invalid Dates, `null`, booleans, arrays, and objects throw `TypeError` with an `xqtime:` prefix.
+
+## Relative Labels
+
+- `< 60s`: `刚刚`
+- `< 1h`: `N分钟前`
+- `< 1d`: `N小时前`
+- `< 30d`: `N天前`
+- `< 365d`: `N月前`
+- `< 100y`: `N年前`
+- `< 1000y`: `N世纪前`
+- `< 10000y`: `N千年前`
+- `< 100000000y`: `N万年前`
+- Otherwise: `N亿年前`
+
+Months are fixed 30-day units and years are fixed 365-day units. Thresholds are exclusive at the lower boundary: exactly `60000` ms is `1分钟前`, while `59999` ms is `刚刚`.
+
+## Typical Use
+
+```js
+import xqtime, { friend } from 'xqtime';
+
+const minute = 60 * 1000;
+xqtime.friend(Date.now() - 12 * minute); // '12分钟前'
+friend(Date.now() - 2 * 24 * 60 * minute, true); // '2天前(MM-DD)'
+friend('2012-04-12'); // Parsed as local midnight
+```
+
+```html
+<script src="https://unpkg.com/xqtime/lib/xqtime.min.js"></script>
+<script>
+  console.log(xqtime.friend(Date.now() - 3600000)); // '1小时前'
+</script>
+```
+
+## Constraints
+
+- Browser, Node.js, AMD, and CMD are supported. The package requires Node.js 14.13 or newer.
+- Date strings without an explicit timezone are parsed as local time.
+- The function performs duration comparisons, not calendar arithmetic; it does not account for variable month lengths, leap years, or DST.
+- Future timestamps return `刚刚`, not a negative relative value.
+- The implementation reads the current clock on every call. Freeze or mock `Date.now()` when testing exact boundaries.
+- `Date` and parsed date strings cannot reach the `N亿年前` branch. A finite numeric timestamp outside the `Date` range can reach it, but `append = true` may not produce a valid calendar value.

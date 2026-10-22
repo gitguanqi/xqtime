@@ -112,8 +112,8 @@ Notes on the contract:
   is a pure duration comparison — this keeps the function cheap and timezone-free.
 - Boundaries are exclusive: exactly `60000ms` is `1分钟前`, `59999ms` is `刚刚`.
 - A future time is reported as `刚刚` rather than a negative value.
-- The `亿年前` level exists in the label table but is unreachable: `Date` tops out around
-  ±275,000 years.
+- A `Date` or parsed date string cannot reach the `亿年前` level. A finite numeric timestamp
+  outside the `Date` range can reach it, but `append = true` may not have a valid calendar value.
 
 ## Invalid input
 
@@ -128,6 +128,10 @@ xqtime.friend('2021-02-30'); // TypeError: xqtime: 时间字符串的月日时�
 
 > Before 0.2.0 these inputs silently produced `NaNundefined`. If you relied on that, wrap the
 > call or validate the input first.
+
+## AI agent metadata
+
+[llms.txt](./llms.txt) is the compact API contract for agent integrations.
 
 ## Development
 

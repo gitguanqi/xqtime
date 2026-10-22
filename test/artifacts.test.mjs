@@ -12,10 +12,16 @@ import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import vm from 'node:vm';
 
+import { checkAgentMetadata } from '../scripts/check-agent-metadata.mjs';
+
 const require = createRequire(import.meta.url);
 
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const read = (name) => readFileSync(new URL(`../lib/${name}`, import.meta.url), 'utf8');
+
+test('发布包包含可发现的 llms.txt 元数据', async () => {
+    await checkAgentMetadata();
+});
 
 const artifactNames = [
     'xqtime.js',

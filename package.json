@@ -1,9 +1,10 @@
 {
   "name": "xqtime",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Friendly relative time labels (刚刚 / 12分钟前 / 3天前) from a Date, a timestamp or a date string.",
   "main": "lib/xqtime.js",
   "types": "index.d.ts",
+  "llms": "./llms.txt",
   "exports": {
     ".": {
       "types": "./index.d.ts",
@@ -23,6 +24,7 @@
   "files": [
     "lib",
     "index.d.ts",
+    "llms.txt",
     "zh.md",
     "CHANGELOG.md"
   ],
@@ -32,10 +34,13 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "build:check": "node scripts/build.mjs --check",
+    "check:agent-docs": "node scripts/check-agent-metadata.mjs",
     "test": "node scripts/build.mjs --check && node --test test/unit.test.mjs test/artifacts.test.mjs test/pages.test.mjs",
     "test:node": "node test/node.js",
     "test:browser": "node scripts/serve.mjs",
-    "prepublishOnly": "node scripts/build.mjs --check"
+    "prepublishOnly": "npm run check:agent-docs && node scripts/build.mjs --check",
+    "commitlint": "commitlint --edit",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -55,6 +60,10 @@
   },
   "homepage": "https://github.com/gitguanqi/xqtime#readme",
   "devDependencies": {
-    "esbuild": "0.28.2"
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "esbuild": "0.28.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0"
   }
 }
